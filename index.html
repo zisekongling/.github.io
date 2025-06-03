@@ -1557,7 +1557,7 @@
         async function downloadExtensionQuotes() {
             try {
                 // 使用CORS代理并添加时间戳防止缓存
-                const proxyUrl = 'https://api.allorigins.win/get?url=';
+                const proxyUrl = '';
                 const targetUrl = 'https://gitee.com/zisekongling/apk-automatic-update/raw/master/time-yiyan/yiyan.json';
                 const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}&t=${Date.now()}`);
                 
