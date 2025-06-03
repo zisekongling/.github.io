@@ -96,7 +96,7 @@
         }
         .container {
             width: 100%;
-            max-width: 1800px; /* 增加最大宽度适应宽屏 */
+            max-width: 1000px;
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -117,7 +117,7 @@
             gap: 10px;
         }
         .logo h1 {
-            font-size: 1.8rem; /* 增大字体 */
+            font-size: 1.6rem;
             background: linear-gradient(45deg, var(--accent), #ffa502);
             -webkit-background-clip: text;
             background-clip: text;
@@ -129,13 +129,13 @@
             flex-wrap: wrap;
         }
         .logo i {
-            font-size: 2rem; /* 增大图标 */
+            font-size: 1.8rem;
             color: var(--accent);
         }
         .gaokao-countdown {
-            font-size: 1.2rem; /* 增大字体 */
+            font-size: 1.1rem;
             background: rgba(255, 107, 107, 0.1);
-            padding: 8px 15px; /* 增大内边距 */
+            padding: 6px 12px;
             border-radius: 20px;
             color: var(--gaokao-color);
             font-weight: 600;
@@ -225,14 +225,14 @@
             transition: all 0.3s ease;
         }
         .date-display {
-            font-size: 1.6rem; /* 增大字体 */
+            font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 10px;
             color: var(--text);
             text-align: center;
         }
         .time-display {
-            font-size: 5.5rem; /* 增大字体 */
+            font-size: 4.5rem;
             font-weight: 800;
             color: var(--text);
             text-align: center;
@@ -245,7 +245,7 @@
             transition: font-size 0.3s ease;
         }
         .milliseconds {
-            font-size: 2.8rem; /* 增大字体 */
+            font-size: 2.2rem;
             color: var(--accent);
             align-self: flex-end;
             margin-bottom: 5px;
@@ -262,40 +262,30 @@
             min-height: 200px;
             transition: all 0.3s ease;
         }
-        /* 金句优先模式 - 时间部分较小 */
         .quote-priority .time-section {
             flex: 1;
-            padding: 20px;
         }
         .quote-priority .quote-section {
-            flex: 3;
-            padding: 40px;
+            flex: 2;
         }
         .quote-priority .time-display {
-            font-size: 4rem;
+            font-size: 3.8rem;
         }
         .quote-priority .quote-content {
-            font-size: 2.4rem; /* 增大字体 */
-            min-height: 180px;
+            font-size: 2rem;
         }
-        
-        /* 时间优先模式 - 时间部分较大 */
         .time-priority .time-section {
-            flex: 3;
-            padding: 40px;
+            flex: 2;
         }
         .time-priority .quote-section {
             flex: 1;
-            padding: 20px;
         }
         .time-priority .time-display {
-            font-size: 6.5rem; /* 增大字体 */
+            font-size: 5.5rem;
         }
         .time-priority .quote-content {
-            font-size: 1.8rem;
-            min-height: 120px;
+            font-size: 1.6rem;
         }
-        
         .quote-hidden .quote-section {
             display: none;
         }
@@ -304,7 +294,7 @@
             justify-content: center;
         }
         .quote-hidden .time-display {
-            font-size: 7.5rem !important; /* 增大字体 */
+            font-size: 6.5rem !important;
         }
         .quote-header {
             display: flex;
@@ -313,14 +303,14 @@
             margin-bottom: 20px;
         }
         .quote-header h2 {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             color: var(--text);
             display: flex;
             align-items: center;
             gap: 8px;
         }
         .quote-content {
-            font-size: 2rem;
+            font-size: 1.8rem;
             line-height: 1.4;
             text-align: center;
             color: var(--text);
@@ -328,7 +318,7 @@
             margin: 15px 0;
             padding: 0 15px;
             position: relative;
-            min-height: 150px;
+            min-height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -336,7 +326,7 @@
         .quote-content::before,
         .quote-content::after {
             content: '"';
-            font-size: 3.5rem; /* 增大字体 */
+            font-size: 3rem;
             color: rgba(106, 17, 203, 0.2);
             position: absolute;
         }
@@ -349,7 +339,7 @@
             right: -10px;
         }
         .quote-author {
-            font-size: 1.4rem; /* 增大字体 */
+            font-size: 1.3rem;
             text-align: right;
             color: var(--text);
             opacity: 0.8;
@@ -362,7 +352,7 @@
             color: var(--primary);
             padding: 4px 12px;
             border-radius: 16px;
-            font-size: 1.05rem; /* 增大字体 */
+            font-size: 0.95rem;
             position: absolute;
             bottom: 15px;
             left: 15px;
@@ -370,7 +360,7 @@
         .cursor {
             display: inline-block;
             width: 2px;
-            height: 2.2rem; /* 增大高度 */
+            height: 2rem;
             background: var(--accent);
             margin-left: 3px;
             vertical-align: middle;
@@ -403,7 +393,7 @@
             margin-bottom: 20px;
         }
         .settings-header h2 {
-            font-size: 1.8rem; /* 增大字体 */
+            font-size: 1.6rem;
             color: var(--text);
             display: flex;
             align-items: center;
@@ -446,7 +436,7 @@
             background: rgba(40, 40, 60, 0.5);
         }
         .setting-group h3 {
-            font-size: 1.4rem; /* 增大字体 */
+            font-size: 1.3rem;
             margin-bottom: 15px;
             color: var(--primary);
             display: flex;
@@ -463,7 +453,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 1.05rem; /* 增大字体 */
+            font-size: 1rem;
         }
         .checkbox-item input {
             width: 18px;
@@ -479,7 +469,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 1.05rem; /* 增大字体 */
+            font-size: 1rem;
         }
         .background-options {
             display: flex;
@@ -495,7 +485,7 @@
             padding: 10px 15px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
-            font-size: 1.05rem;
+            font-size: 1rem;
             background: rgba(255, 255, 255, 0.5);
         }
         .dark-theme .bg-input,
@@ -551,7 +541,7 @@
             margin-bottom: 6px;
             font-weight: 500;
             color: var(--primary);
-            font-size: 1.05rem; /* 增大字体 */
+            font-size: 1rem;
         }
         .interval-control input {
             width: 100%;
@@ -587,7 +577,7 @@
             cursor: pointer;
             text-align: center;
             transition: all 0.3s;
-            font-size: 1.05rem; /* 增大字体 */
+            font-size: 1rem;
         }
         .action-btn:hover {
             background: rgba(110, 142, 251, 0.25);
@@ -601,7 +591,7 @@
             padding: 8px;
             border-radius: 8px;
             background: rgba(106, 17, 203, 0.05);
-            font-size: 1rem; /* 增大字体 */
+            font-size: 0.95rem;
         }
         .status-indicator {
             width: 10px;
@@ -611,6 +601,19 @@
         }
         .status-indicator.offline {
             background: #e74c3c;
+        }
+        .download-btn {
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 5px;
+            margin-left: 5px;
+        }
+        .download-btn:hover {
+            color: var(--accent);
+            transform: scale(1.1);
         }
         .pulse {
             animation: pulse 1s infinite;
@@ -791,78 +794,63 @@
             background-color: #e74c3c;
         }
         
-        /* 宽屏优化（3810x1812） */
-        @media (min-width: 2000px) {
+        /* 2K屏幕优化 */
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 1400px;
+            }
+            .time-display {
+                font-size: 5rem;
+            }
+            .quote-content {
+                font-size: 2.2rem;
+            }
+            .time-section {
+                padding: 40px;
+            }
+            .quote-section {
+                padding: 40px;
+            }
+            .time-priority .time-display {
+                font-size: 6.5rem;
+            }
+            .quote-priority .quote-content {
+                font-size: 2.4rem;
+            }
+        }
+        /* 超宽屏适配 */
+        @media (min-width: 2500px) {
             .container {
                 max-width: 1800px;
             }
-            .logo h1 {
-                font-size: 2.2rem;
-            }
-            .gaokao-countdown {
-                font-size: 1.4rem;
-            }
-            .btn {
-                padding: 10px 18px;
-                font-size: 1.1rem;
-            }
             .time-display {
-                font-size: 6.5rem;
-            }
-            .milliseconds {
-                font-size: 3.2rem;
-            }
-            .date-display {
-                font-size: 1.8rem;
+                font-size: 6rem;
             }
             .quote-content {
-                font-size: 2.4rem;
+                font-size: 2.5rem;
+            }
+            .time-section {
+                padding: 50px;
+            }
+            .quote-section {
+                padding: 50px;
+                min-height: 250px;
+            }
+            .quote-header h2 {
+                font-size: 1.8rem;
             }
             .quote-author {
                 font-size: 1.6rem;
             }
-            .quote-type {
+            .logo h1 {
+                font-size: 2rem;
+            }
+            .gaokao-countdown {
+                font-size: 1.3rem;
+            }
+            .btn {
                 font-size: 1.2rem;
-            }
-            .time-section {
-                padding: 40px;
-            }
-            .quote-section {
-                padding: 40px;
-            }
-            .time-priority .time-display {
-                font-size: 7.5rem;
-            }
-            .quote-priority .quote-content {
-                font-size: 2.8rem;
-            }
-            .settings-grid {
-                max-height: 75vh;
-                grid-template-columns: repeat(2, 1fr); /* 两列布局 */
-            }
-        }
-        /* 2K屏幕优化 */
-        @media (min-width: 1920px) and (max-width: 1999px) {
-            .container {
-                max-width: 1600px;
-            }
-            .time-display {
-                font-size: 5.5rem;
-            }
-            .quote-content {
-                font-size: 2.2rem;
-            }
-            .time-section {
-                padding: 35px;
-            }
-            .quote-section {
-                padding: 35px;
-            }
-            .time-priority .time-display {
-                font-size: 6.5rem;
-            }
-            .quote-priority .quote-content {
-                font-size: 2.4rem;
+                padding: 10px 20px;
             }
         }
         @media (max-width: 900px) and (orientation: portrait) {
@@ -1274,12 +1262,12 @@
                             <i class="fas fa-image"></i> 选择本地图片
                         </button>
                         <div class="preset-buttons">
+                            <button type="button" class="preset-btn" data-preset="none">无背景</button>
                             <button type="button" class="preset-btn" data-preset="weimei">唯美</button>
                             <button type="button" class="preset-btn" data-preset="bluearchive">蔚蓝档案</button>
                             <button type="button" class="preset-btn" data-preset="anime">二次元</button>
                             <button type="button" class="preset-btn" data-preset="yuanshen">原神</button>
                             <button type="button" class="preset-btn" data-preset="random">随机</button>
-                            <button type="button" class="preset-btn" data-preset="none">无背景</button>
                         </div>
                     </div>
                 </div>
@@ -1338,6 +1326,9 @@
                     <div class="api-status">
                         <div class="status-indicator" id="extStatus"></div>
                         <span id="extStatusText">拓展金句: 已启用 (5条)</span>
+                        <button type="button" class="download-btn" id="downloadExtBtn" title="重新下载拓展金句">
+                            <i class="fas fa-download"></i>
+                        </button>
                     </div>
                 </div>
                 
@@ -1466,6 +1457,7 @@
         const noSleepVideo = document.getElementById('noSleepVideo');
         const extStatusEl = document.getElementById('extStatus');
         const extStatusTextEl = document.getElementById('extStatusText');
+        const downloadExtBtn = document.getElementById('downloadExtBtn');
         
         // 设置元素
         const showDateCheckbox = document.getElementById('showDate');
@@ -1537,7 +1529,8 @@
         let extensionQuotes = [];
         let displayPriority = 'quote'; // 'quote' 或 'time'
         let wakeLock = null;
-        let bgInterval = null;
+        let downloadRetryCount = 0;
+        const maxRetries = 10;
 
         // 示例扩展金句JSON数据
         const sampleExtensionQuotes = [
@@ -1615,45 +1608,49 @@
             }
         }
 
-        // 下载扩展金句JSON（带重试机制）
+        // 下载扩展金句JSON
         async function downloadExtensionQuotes() {
-            let retryCount = 0;
-            const maxRetries = 10; // 最多重试10次
-            
-            while (retryCount < maxRetries) {
-                try {
-                    // 使用CORS代理并添加时间戳防止缓存
-                    const proxyUrl = 'https://api.allorigins.win/get?url=';
-                    const targetUrl = 'https://gitee.com/zisekongling/apk-automatic-update/raw/master/time-yiyan/yiyan.json';
-                    const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}&t=${Date.now()}`);
-                    
-                    if (!response.ok) throw new Error('扩展金句下载失败');
-                    
-                    const data = await response.json();
-                    const jsonData = JSON.parse(data.contents);
-                    if (Array.isArray(jsonData) && jsonData.length > 0) {
-                        extensionQuotes = jsonData;
-                        localStorage.setItem('extensionQuotes', JSON.stringify(jsonData));
-                        showToast('扩展金句已更新');
-                        updateExtensionStatus();
-                        return; // 成功则退出函数
-                    } else {
-                        throw new Error('无效的扩展金句数据');
-                    }
-                } catch (error) {
-                    console.error(`下载扩展金句失败 (尝试 ${retryCount + 1}/${maxRetries}):`, error);
-                    retryCount++;
-                    // 每次重试前等待一段时间（指数退避）
-                    await new Promise(resolve => setTimeout(resolve, 2000 * Math.pow(2, retryCount)));
+            try {
+                // 显示下载状态
+                extStatusEl.className = 'status-indicator pulse';
+                extStatusTextEl.textContent = '下载中...';
+                
+                // 使用CORS代理并添加时间戳防止缓存
+                const proxyUrl = 'https://api.allorigins.win/get?url=';
+                const targetUrl = 'https://gitee.com/zisekongling/apk-automatic-update/raw/master/time-yiyan/yiyan.json';
+                const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}&t=${Date.now()}`);
+                
+                if (!response.ok) throw new Error('扩展金句下载失败');
+                
+                const data = await response.json();
+                const jsonData = JSON.parse(data.contents);
+                if (Array.isArray(jsonData) && jsonData.length > 0) {
+                    extensionQuotes = jsonData;
+                    localStorage.setItem('extensionQuotes', JSON.stringify(jsonData));
+                    showToast('扩展金句已更新');
+                    updateExtensionStatus();
+                    downloadRetryCount = 0; // 重置重试计数器
+                } else {
+                    throw new Error('无效的扩展金句数据');
+                }
+            } catch (error) {
+                console.error('下载扩展金句失败:', error);
+                
+                // 重试机制
+                if (downloadRetryCount < maxRetries) {
+                    downloadRetryCount++;
+                    const delay = Math.min(3000, downloadRetryCount * 500); // 指数退避
+                    setTimeout(downloadExtensionQuotes, delay);
+                    showToast(`下载失败，正在重试 (${downloadRetryCount}/${maxRetries})`);
+                } else {
+                    // 使用示例数据作为备用
+                    extensionQuotes = sampleExtensionQuotes;
+                    localStorage.setItem('extensionQuotes', JSON.stringify(sampleExtensionQuotes));
+                    showToast('使用本地扩展金句');
+                    updateExtensionStatus();
+                    downloadRetryCount = 0; // 重置重试计数器
                 }
             }
-            
-            // 所有尝试都失败后使用示例数据
-            console.error('所有尝试失败，使用本地扩展金句');
-            extensionQuotes = sampleExtensionQuotes;
-            localStorage.setItem('extensionQuotes', JSON.stringify(sampleExtensionQuotes));
-            showToast('使用本地扩展金句');
-            updateExtensionStatus();
         }
         
         // 初始化扩展金句
@@ -2030,16 +2027,21 @@
             }
             
             if (finalUrl !== currentBgUrl) {
-                document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('${finalUrl}')`;
-                document.body.style.backgroundSize = 'cover';
-                document.body.style.backgroundPosition = 'center';
+                if (finalUrl) {
+                    document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('${finalUrl}')`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                } else {
+                    // 无背景时使用默认渐变
+                    document.body.style.background = `linear-gradient(135deg, var(--primary), var(--secondary))`;
+                }
                 currentBgUrl = finalUrl;
                 
                 if (showNotification) {
                     showToast('背景图片已成功应用！');
                 }
                 
-                if (showBgProgressCheckbox.checked && !finalUrl.startsWith('data:') && currentPreset !== 'bing') {
+                if (showBgProgressCheckbox.checked && finalUrl && !finalUrl.startsWith('data:') && currentPreset !== 'bing') {
                     bgProgressEl.style.display = 'block';
                 } else {
                     bgProgressEl.style.display = 'none';
@@ -2049,6 +2051,7 @@
         
         // 预设背景配置
         const bgPresets = {
+            none: '',
             weimei: 'https://t.alcy.cc/fj',
             bluearchive: 'https://rba.kanostar.top/adapt',
             anime: 'https://imgapi.xl0408.top/index.php',
@@ -2070,18 +2073,7 @@
             
             if (bgInterval) clearInterval(bgInterval);
             
-            if (preset === 'none') {
-                // 无背景预设 - 使用当前主题的渐变
-                document.body.style.background = `linear-gradient(135deg, var(--primary), var(--secondary))`;
-                document.body.style.backgroundSize = 'cover';
-                document.body.style.backgroundPosition = 'center';
-                currentBgUrl = '';
-                bgProgressEl.style.display = 'none';
-                
-                if (showNotification) {
-                    showToast('已应用无背景设置');
-                }
-            } else if (preset === 'random') {
+            if (preset === 'random') {
                 changeRandomBg(avoidCache, showNotification);
                 bgInterval = setInterval(() => changeRandomBg(true, false), bgIntervalTime * 60 * 1000);
             } else {
@@ -2147,11 +2139,6 @@
             
             if (currentTheme !== 'light') {
                 document.body.classList.add(`${currentTheme}-theme`);
-            }
-            
-            // 如果当前是无背景，重新应用背景
-            if (currentPreset === 'none') {
-                applyPresetBackground('none');
             }
             
             localStorage.setItem('theme', currentTheme);
@@ -2541,6 +2528,7 @@
             selectAllBtn.addEventListener('click', selectAllTypes);
             deselectAllBtn.addEventListener('click', deselectAllTypes);
             resetBtn.addEventListener('click', resetToDefault);
+            downloadExtBtn.addEventListener('click', downloadExtensionQuotes);
             
             powerSavingModeCheckbox.addEventListener('change', () => {
                 powerSavingMode = powerSavingModeCheckbox.checked;
