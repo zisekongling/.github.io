@@ -146,6 +146,19 @@
             line-height: 1.3;
             animation: pulse 2s infinite;
         }
+        .next-exam {
+            font-size: 1rem;
+            background: rgba(106, 17, 203, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: var(--primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-align: center;
+            line-height: 1.3;
+        }
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -1145,6 +1158,33 @@
                 font-size: 0.8rem !important;
             }
         }
+        /* 科目设置样式 */
+        .subject-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .subject-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.95rem;
+        }
+        .subject-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+        .next-exam-container {
+            margin-left: 10px;
+            display: none;
+        }
+        .gaokao-exam {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
     </style>
 </head>
 <body>
@@ -1157,6 +1197,12 @@
                     <span class="gaokao-countdown" id="gaokaoCountdown">
                         <i class="fas fa-graduation-cap"></i>
                         <span id="gaokaoText">高考倒计时计算中...</span>
+                    </span>
+                    <span class="next-exam-container" id="nextExamContainer">
+                        <span class="next-exam" id="nextExam">
+                            <i class="fas fa-book-open"></i>
+                            <span id="nextExamText">下一科：语文</span>
+                        </span>
                     </span>
                 </h1>
             </div>
@@ -1281,6 +1327,9 @@
                         <button type="button" class="btn btn-small btn-outline" id="deselectAllBtn">
                             <i class="far fa-square"></i> 全不选
                         </button>
+                        <button type="button" class="btn btn-small" id="toggleGuaranteeBtn">
+                            <i class="fas fa-shield-alt"></i> 保底机制
+                        </button>
                     </div>
                     <div class="checkbox-group">
                         <label class="checkbox-item">
@@ -1320,7 +1369,7 @@
                             <input type="checkbox" name="quoteType" value="l"> 抖机灵
                         </label>
                         <label class="checkbox-item">
-                            <input type="checkbox" name="quoteType" value="m" id="extensionType"> 拓展
+                            <input type="checkbox" name="quoteType" value="m" id="extensionType" checked> 拓展
                         </label>
                     </div>
                     <div class="api-status">
@@ -1343,6 +1392,39 @@
                             <label for="bgInterval">背景更换间隔 (分钟)</label>
                             <input type="number" id="bgInterval" min="1" value="30">
                         </div>
+                    </div>
+                </div>
+                
+                <div class="setting-group">
+                    <h3><i class="fas fa-book"></i> 高考科目设置</h3>
+                    <div class="subject-group">
+                        <label class="subject-item">
+                            <input type="checkbox" name="ignoredSubject" value="语文" checked> 语文
+                        </label>
+                        <label class="subject-item">
+                            <input type="checkbox" name="ignoredSubject" value="数学" checked> 数学
+                        </label>
+                        <label class="subject-item">
+                            <input type="checkbox" name="ignoredSubject" value="英语" checked> 英语
+                        </label>
+                        <label class="subject-item">
+                            <input type="checkbox" name="ignoredSubject" value="物理"> 物理
+                        </label>
+                        <label class="subject-item">
+                            <input type="checkbox" name="ignoredSubject" value="历史"> 历史
+                        </label>
+                        <label class="subject-item">
+                            <input type="checkbox" name="ignoredSubject" value="化学"> 化学
+                        </label>
+                        <label class="subject-item">
+                            <input type="checkbox" name="ignoredSubject" value="地理"> 地理
+                        </label>
+                        <label class="subject-item">
+                            <input type="checkbox" name="ignoredSubject" value="政治"> 政治
+                        </label>
+                        <label class="subject-item">
+                            <input type="checkbox" name="ignoredSubject" value="生物"> 生物
+                        </label>
                     </div>
                 </div>
                 
@@ -1458,6 +1540,8 @@
         const extStatusEl = document.getElementById('extStatus');
         const extStatusTextEl = document.getElementById('extStatusText');
         const downloadExtBtn = document.getElementById('downloadExtBtn');
+        const nextExamContainer = document.getElementById('nextExamContainer');
+        const nextExamText = document.getElementById('nextExamText');
         
         // 设置元素
         const showDateCheckbox = document.getElementById('showDate');
@@ -1488,6 +1572,7 @@
         const quotePriorityRadio = document.getElementById('quotePriority');
         const timePriorityRadio = document.getElementById('timePriority');
         const extensionTypeCheckbox = document.getElementById('extensionType');
+        const toggleGuaranteeBtn = document.getElementById('toggleGuaranteeBtn');
         
         // 状态变量
         let currentTheme = 'light';
@@ -1531,6 +1616,23 @@
         let wakeLock = null;
         let downloadRetryCount = 0;
         const maxRetries = 10;
+        let consecutiveNonExtension = 0; // 连续非拓展金句计数
+        let enableQuoteGuarantee = true; // 是否启用保底机制，默认开启
+
+        // 高考科目时间表
+        const examSubjects = [
+            { name: "语文", date: "06-07", startTime: "09:00", endTime: "11:30" },
+            { name: "数学", date: "06-07", startTime: "15:00", endTime: "17:00" },
+            { name: "物理/历史", date: "06-08", startTime: "09:00", endTime: "10:15" },
+            { name: "外语", date: "06-08", startTime: "15:00", endTime: "17:00" },
+            { name: "化学", date: "06-09", startTime: "08:30", endTime: "09:45" },
+            { name: "地理", date: "06-09", startTime: "11:00", endTime: "12:15" },
+            { name: "政治", date: "06-09", startTime: "14:30", endTime: "15:45" },
+            { name: "生物", date: "06-09", startTime: "17:00", endTime: "18:15" }
+        ];
+        
+        // 被忽略的科目
+        let ignoredSubjects = [];
 
         // 示例扩展金句JSON数据
         const sampleExtensionQuotes = [
@@ -1721,6 +1823,7 @@
             }
             
             updateGaokaoCountdown();
+            updateNextExam();
         }
 
         // 高性能时间更新
@@ -1863,6 +1966,69 @@
             }
         }
         
+        // 更新下一科考试信息
+        function updateNextExam() {
+            const now = new Date(Date.now() + timeOffset);
+            const currentYear = now.getFullYear();
+            
+            // 检查是否为高考期间（6月7、8、9日）
+            const month = now.getMonth() + 1; // 月份从0开始
+            const date = now.getDate();
+            
+            if (month !== 6 || date < 7 || date > 9) {
+                nextExamContainer.style.display = 'none';
+                return;
+            }
+            
+            // 显示考试信息框
+            nextExamContainer.style.display = 'inline-block';
+            
+            // 找到下一科考试
+            let nextExam = null;
+            let minTimeDiff = Infinity;
+            
+            for (const subject of examSubjects) {
+                // 检查科目是否被忽略
+                if (ignoredSubjects.includes(subject.name)) continue;
+                
+                // 解析日期和时间
+                const [month, day] = subject.date.split('-');
+                const [hours, minutes] = subject.startTime.split(':');
+                
+                // 创建考试日期对象（当前年份）
+                const examDate = new Date(currentYear, parseInt(month) - 1, parseInt(day), 
+                    parseInt(hours), parseInt(minutes));
+                
+                // 计算时间差
+                const timeDiff = examDate - now;
+                
+                // 如果考试已经开始但未结束，则显示该考试
+                if (timeDiff < 0 && timeDiff > -1000 * 60 * 60 * 3) {
+                    // 考试正在进行中
+                    const minutesLeft = Math.floor(Math.abs(timeDiff) / (1000 * 60));
+                    nextExamText.innerHTML = `${subject.name}考试中<br>剩余: ${Math.floor(minutesLeft / 60)}时${minutesLeft % 60}分`;
+                    return;
+                }
+                
+                // 如果考试尚未开始，且时间差小于当前最小时间差
+                if (timeDiff > 0 && timeDiff < minTimeDiff) {
+                    minTimeDiff = timeDiff;
+                    nextExam = subject;
+                }
+            }
+            
+            if (nextExam) {
+                // 计算倒计时
+                const hoursLeft = Math.floor(minTimeDiff / (1000 * 60 * 60));
+                const minutesLeft = Math.floor((minTimeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                
+                nextExamText.innerHTML = `下一科: ${nextExam.name}<br>开考: ${hoursLeft}时${minutesLeft}分`;
+            } else {
+                // 所有考试都已结束
+                nextExamText.innerHTML = "所有科目考试结束";
+            }
+        }
+        
         // 本地备用金句库
         const localQuotes = [
             {quote: "宝剑锋从磨砺出，梅花香自苦寒来", author: "出自：《警世贤文》", type: "文学"},
@@ -1911,11 +2077,19 @@
         async function fetchQuote() {
             if (isTyping) return;
             
+            // 检查保底机制 - 每十句保底一句拓展金句
+            let forceExtension = false;
+            if (enableQuoteGuarantee && consecutiveNonExtension >= 9 && 
+                extensionTypeCheckbox.checked && extensionQuotes.length > 0) {
+                forceExtension = true;
+                consecutiveNonExtension = 0;
+            }
+            
             // 随机选择类型，包括可能的扩展类型
             let randomType = quoteTypes[Math.floor(Math.random() * quoteTypes.length)];
             
-            // 如果选择了扩展类型并且有扩展金句
-            if (randomType === 'm' && extensionTypeCheckbox.checked && extensionQuotes.length > 0) {
+            // 如果选择了扩展类型并且有扩展金句，或者强制使用扩展金句
+            if ((forceExtension || randomType === 'm') && extensionTypeCheckbox.checked && extensionQuotes.length > 0) {
                 const randomIndex = Math.floor(Math.random() * extensionQuotes.length);
                 const quote = extensionQuotes[randomIndex];
                 
@@ -1984,6 +2158,11 @@
                 apiStatusEl.className = 'status-indicator';
                 apiStatusTextEl.textContent = 'API正常';
                 resetQuoteTimer();
+                
+                // 增加非拓展金句计数
+                if (enableQuoteGuarantee && data.type !== 'm') {
+                    consecutiveNonExtension++;
+                }
             } catch (error) {
                 console.error('获取金句失败:', error);
                 const randomIndex = Math.floor(Math.random() * localQuotes.length);
@@ -2000,6 +2179,11 @@
                 apiStatusTextEl.textContent = '使用本地金句';
                 resetQuoteTimer();
                 showToast('金句API不可用，已使用本地金句');
+                
+                // 增加非拓展金句计数
+                if (enableQuoteGuarantee) {
+                    consecutiveNonExtension++;
+                }
             }
         }
         
@@ -2191,7 +2375,9 @@
                 hidePerfIndicator: hidePerfIndicatorCheckbox.checked,
                 fpsThreshold: parseInt(fpsThresholdInput.value) || 30,
                 memoryThreshold: parseInt(memoryThresholdInput.value) || 500,
-                displayPriority: document.querySelector('input[name="displayPriority"]:checked').value
+                displayPriority: document.querySelector('input[name="displayPriority"]:checked').value,
+                enableQuoteGuarantee: enableQuoteGuarantee,
+                ignoredSubjects: ignoredSubjects
             };
             
             return settings;
@@ -2221,6 +2407,8 @@
             hidePerfIndicatorCheckbox.checked = settings.hidePerfIndicator || false;
             fpsThreshold = settings.fpsThreshold || 30;
             memoryThreshold = settings.memoryThreshold || 500;
+            enableQuoteGuarantee = settings.enableQuoteGuarantee !== undefined ? settings.enableQuoteGuarantee : true;
+            ignoredSubjects = settings.ignoredSubjects || [];
             
             // 应用显示偏好设置
             document.body.classList.remove('quote-priority', 'time-priority');
@@ -2233,6 +2421,11 @@
             }
             
             perfIndicator.style.display = hidePerfIndicatorCheckbox.checked ? 'none' : 'flex';
+            
+            // 应用被忽略的科目设置
+            document.querySelectorAll('input[name="ignoredSubject"]').forEach(checkbox => {
+                checkbox.checked = !ignoredSubjects.includes(checkbox.value);
+            });
             
             if (powerSavingMode) {
                 applyPowerSavingMode();
@@ -2272,7 +2465,9 @@
                 hidePerfIndicator: hidePerfIndicatorCheckbox.checked,
                 fpsThreshold: parseInt(fpsThresholdInput.value) || 30,
                 memoryThreshold: parseInt(memoryThresholdInput.value) || 500,
-                displayPriority: document.querySelector('input[name="displayPriority"]:checked').value
+                displayPriority: document.querySelector('input[name="displayPriority"]:checked').value,
+                enableQuoteGuarantee: enableQuoteGuarantee,
+                ignoredSubjects: ignoredSubjects
             };
             
             localStorage.setItem('appSettings', JSON.stringify(settings));
@@ -2341,8 +2536,15 @@
                 hidePerfIndicatorCheckbox.checked = settings.hidePerfIndicator || false;
                 fpsThreshold = settings.fpsThreshold || 30;
                 memoryThreshold = settings.memoryThreshold || 500;
+                enableQuoteGuarantee = settings.enableQuoteGuarantee !== undefined ? settings.enableQuoteGuarantee : true;
+                ignoredSubjects = settings.ignoredSubjects || [];
                 
                 perfIndicator.style.display = hidePerfIndicatorCheckbox.checked ? 'none' : 'flex';
+                
+                // 应用被忽略的科目设置
+                document.querySelectorAll('input[name="ignoredSubject"]').forEach(checkbox => {
+                    checkbox.checked = !ignoredSubjects.includes(checkbox.value);
+                });
                 
                 if (powerSavingMode) {
                     applyPowerSavingMode();
@@ -2361,6 +2563,8 @@
                 hidePerfIndicatorCheckbox.checked = false;
                 quotePriorityRadio.checked = true;
                 document.body.classList.add('quote-priority');
+                enableQuoteGuarantee = true;
+                ignoredSubjects = [];
                 saveSettings();
             }
             
@@ -2518,6 +2722,34 @@
                     document.body.classList.remove('quote-priority');
                     document.body.classList.add('time-priority');
                 }
+                saveSettings();
+            });
+            
+            // 监听被忽略科目变化
+            document.querySelectorAll('input[name="ignoredSubject"]').forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    const subject = checkbox.value;
+                    if (checkbox.checked) {
+                        // 从忽略列表中移除
+                        ignoredSubjects = ignoredSubjects.filter(s => s !== subject);
+                    } else {
+                        // 添加到忽略列表
+                        if (!ignoredSubjects.includes(subject)) {
+                            ignoredSubjects.push(subject);
+                        }
+                    }
+                    saveSettings();
+                    updateNextExam(); // 立即更新考试信息
+                });
+            });
+            
+            // 保底机制按钮
+            toggleGuaranteeBtn.addEventListener('click', () => {
+                enableQuoteGuarantee = !enableQuoteGuarantee;
+                toggleGuaranteeBtn.innerHTML = enableQuoteGuarantee ? 
+                    '<i class="fas fa-shield-alt"></i> 保底机制: 开' : 
+                    '<i class="fas fa-shield-alt"></i> 保底机制: 关';
+                showToast(`金句保底机制已${enableQuoteGuarantee ? '开启' : '关闭'}`);
                 saveSettings();
             });
             
