@@ -737,75 +737,6 @@
             transform: scaleX(0);
             transition: transform 0.3s linear;
         }
-        .performance-indicator {
-            position: fixed;
-            bottom: 25px;
-            right: 100px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            z-index: 99;
-            font-size: 1.2rem;
-            transition: all 0.3s;
-        }
-        .performance-indicator.normal {
-            background: #2ecc71;
-            color: white;
-        }
-        .performance-indicator.powersave {
-            background: #f39c12;
-            color: white;
-        }
-        .performance-indicator.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: translateX(20px);
-        }
-        .performance-indicator:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            margin-bottom: 8px;
-        }
-        
-        /* 防休眠模式状态指示器 */
-        .no-sleep-indicator {
-            position: fixed;
-            bottom: 25px;
-            left: 25px;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            z-index: 99;
-        }
-        .no-sleep-indicator .indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #2ecc71;
-            animation: pulse 1.5s infinite;
-        }
-        .no-sleep-indicator .indicator.inactive {
-            background-color: #e74c3c;
-        }
         
         /* 2K屏幕优化 */
         @media (min-width: 1920px) {
@@ -1018,16 +949,6 @@
             .action-buttons {
                 flex-direction: column;
             }
-            .performance-indicator {
-                bottom: 95px;
-                right: 25px;
-            }
-            .no-sleep-indicator {
-                bottom: 95px;
-                left: 15px;
-                padding: 6px 12px;
-                font-size: 0.8rem;
-            }
         }
         @media (max-width: 360px) {
             .time-display {
@@ -1124,9 +1045,6 @@
             .quote-section {
                 padding: 10px !important;
             }
-            .date-display {
-                font-size: 1rem !important;
-            }
         }
         @media (max-height: 600px) {
             .quote-section {
@@ -1176,10 +1094,6 @@
             height: 18px;
             accent-color: var(--primary);
         }
-        .next-exam-container {
-            margin-left: 10px;
-            display: none;
-        }
         .gaokao-exam {
             display: flex;
             align-items: center;
@@ -1197,9 +1111,7 @@
                     <span class="gaokao-countdown" id="gaokaoCountdown">
                         <i class="fas fa-graduation-cap"></i>
                         <span id="gaokaoText">高考倒计时计算中...</span>
-                    </span>
-                    <span class="next-exam-container" id="nextExamContainer">
-                        <span class="next-exam" id="nextExam">
+                        <span class="next-exam" id="nextExam" style="display:none;">
                             <i class="fas fa-book-open"></i>
                             <span id="nextExamText">下一科：语文</span>
                         </span>
@@ -1258,6 +1170,12 @@
             <div class="settings-header">
                 <h2><i class="fas fa-cog"></i> 个性化设置</h2>
                 <div class="settings-buttons">
+                    <button type="button" class="btn btn-outline" id="importSettingsBtn">
+                        <i class="fas fa-file-import"></i> 导入
+                    </button>
+                    <button type="button" class="btn btn-outline" id="exportSettingsBtn">
+                        <i class="fas fa-file-export"></i> 导出
+                    </button>
                     <button type="button" class="btn btn-outline" id="cancelSettingsBtn">
                         <i class="fas fa-times"></i> 取消更改
                     </button>
@@ -1441,32 +1359,6 @@
                 </div>
                 
                 <div class="setting-group">
-                    <h3><i class="fas fa-tachometer-alt"></i> 性能设置</h3>
-                    <div class="interval-controls">
-                        <div class="interval-control">
-                            <label for="fpsThreshold">节能模式阈值 (FPS)</label>
-                            <input type="number" id="fpsThreshold" min="15" max="60" value="30">
-                        </div>
-                        <div class="interval-control">
-                            <label for="memoryThreshold">内存警告 (MB)</label>
-                            <input type="number" id="memoryThreshold" min="100" max="1000" value="500">
-                        </div>
-                    </div>
-                    <div class="checkbox-group">
-                        <label class="checkbox-item">
-                            <input type="checkbox" id="powerSavingMode"> 启用节能模式
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" id="hidePerfIndicator" checked> 隐藏性能指示器
-                        </label>
-                    </div>
-                    <div class="api-status" style="margin-top: 15px;">
-                        <div class="status-indicator" id="perfStatus"></div>
-                        <span id="perfStatusText">当前模式: 正常</span>
-                    </div>
-                </div>
-                
-                <div class="setting-group">
                     <h3><i class="fas fa-sync-alt"></i> 立即操作</h3>
                     <div class="action-buttons">
                         <button type="button" class="action-btn" id="refreshQuoteBtn">
@@ -1496,10 +1388,6 @@
         <i class="fas fa-sync-alt"></i>
     </button>
     
-    <div class="performance-indicator" id="perfIndicator" data-tooltip="节能模式已开启">
-        <i class="fas fa-bolt"></i>
-    </div>
-    
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
         <span id="toastMessage">操作成功！</span>
@@ -1527,21 +1415,18 @@
         const containerEl = document.querySelector('.container');
         const gaokaoCountdownEl = document.getElementById('gaokaoCountdown');
         const gaokaoTextEl = document.getElementById('gaokaoText');
+        const nextExamEl = document.getElementById('nextExam');
+        const nextExamText = document.getElementById('nextExamText');
         const quoteProgressBar = document.getElementById('quoteProgressBar');
         const bgProgressEl = document.getElementById('bgProgress');
         const bgProgressBar = document.getElementById('bgProgressBar');
         const toastEl = document.getElementById('toast');
         const toastMessageEl = document.getElementById('toastMessage');
         const refreshBtnEl = document.getElementById('refreshBtn');
-        const perfIndicator = document.getElementById('perfIndicator');
-        const perfStatusEl = document.getElementById('perfStatus');
-        const perfStatusTextEl = document.getElementById('perfStatusText');
         const noSleepVideo = document.getElementById('noSleepVideo');
         const extStatusEl = document.getElementById('extStatus');
         const extStatusTextEl = document.getElementById('extStatusText');
         const downloadExtBtn = document.getElementById('downloadExtBtn');
-        const nextExamContainer = document.getElementById('nextExamContainer');
-        const nextExamText = document.getElementById('nextExamText');
         
         // 设置元素
         const showDateCheckbox = document.getElementById('showDate');
@@ -1555,6 +1440,8 @@
         const fullscreenBtn = document.getElementById('fullscreenBtn');
         const themeBtn = document.getElementById('themeBtn');
         const settingsBtn = document.getElementById('settingsBtn');
+        const importSettingsBtn = document.getElementById('importSettingsBtn');
+        const exportSettingsBtn = document.getElementById('exportSettingsBtn');
         const cancelSettingsBtn = document.getElementById('cancelSettingsBtn');
         const saveSettingsBtn = document.getElementById('saveSettingsBtn');
         const selectAllBtn = document.getElementById('selectAllBtn');
@@ -1565,10 +1452,6 @@
         const refreshQuoteBtn = document.getElementById('refreshQuoteBtn');
         const refreshBgBtn = document.getElementById('refreshBgBtn');
         const resetBtn = document.getElementById('resetBtn');
-        const powerSavingModeCheckbox = document.getElementById('powerSavingMode');
-        const hidePerfIndicatorCheckbox = document.getElementById('hidePerfIndicator');
-        const fpsThresholdInput = document.getElementById('fpsThreshold');
-        const memoryThresholdInput = document.getElementById('memoryThreshold');
         const quotePriorityRadio = document.getElementById('quotePriority');
         const timePriorityRadio = document.getElementById('timePriority');
         const extensionTypeCheckbox = document.getElementById('extensionType');
@@ -1600,17 +1483,8 @@
         let quoteAnimationFrame = null;
         let bgAnimationFrame = null;
         let currentBgUrl = '';
-        let powerSavingMode = false;
         let timeOffset = 0;
         let lastTimeSync = 0;
-        let frameCount = 0;
-        let lastFpsUpdate = 0;
-        let currentFps = 0;
-        let fpsThreshold = 30;
-        let memoryThreshold = 500;
-        let lastMemoryCheck = 0;
-        let highMemoryUsage = false;
-        let powerSavingInterval = null;
         let extensionQuotes = [];
         let displayPriority = 'quote'; // 'quote' 或 'time'
         let wakeLock = null;
@@ -1773,22 +1647,6 @@
             updateExtensionStatus();
         }
         
-        // 性能监控
-        function startPerformanceMonitor() {
-            setInterval(() => {
-                // 检测内存使用
-                if (performance.memory) {
-                    const usedMB = performance.memory.usedJSHeapSize / (1024 * 1024);
-                    if (usedMB > memoryThreshold && !highMemoryUsage) {
-                        highMemoryUsage = true;
-                        showToast(`内存使用过高: ${usedMB.toFixed(2)}MB`);
-                    } else if (usedMB <= memoryThreshold && highMemoryUsage) {
-                        highMemoryUsage = false;
-                    }
-                }
-            }, 5000);
-        }
-        
         // 更新显示时间
         function updateTimeDisplay() {
             const now = new Date(Date.now() + timeOffset);
@@ -1807,7 +1665,7 @@
                 if (colonAfterHour) colonAfterHour.classList.add('blink-colon');
             }
             
-            if (showMillisecondsCheckbox.checked && !powerSavingMode) {
+            if (showMillisecondsCheckbox.checked) {
                 millisecondsEl.textContent = String(now.getMilliseconds()).padStart(3, '0');
                 document.querySelector('.milliseconds').style.display = 'inline';
             } else {
@@ -1823,91 +1681,12 @@
             }
             
             updateGaokaoCountdown();
-            updateNextExam();
         }
 
-        // 高性能时间更新
+        // 时间更新
         function updateTime(timestamp) {
             updateTimeDisplay();
-            
-            frameCount++;
-            if (timestamp - lastFpsUpdate >= 1000) {
-                currentFps = frameCount;
-                frameCount = 0;
-                lastFpsUpdate = timestamp;
-                
-                if (!powerSavingMode && currentFps < fpsThreshold) {
-                    powerSavingMode = true;
-                    powerSavingModeCheckbox.checked = true;
-                    applyPowerSavingMode();
-                    showToast(`检测到低帧率 (${currentFps}FPS)，已自动开启节能模式`);
-                }
-                
-                // 更新性能指示器提示
-                perfIndicator.setAttribute('data-tooltip', `FPS: ${currentFps} | 内存: ${getMemoryUsage()}MB`);
-            }
-            
-            if (!powerSavingMode) {
-                animationFrameId = requestAnimationFrame(updateTime);
-            }
-        }
-        
-        // 节能模式更新时间
-        function updateTimeInPowerSavingMode() {
-            updateTimeDisplay();
-        }
-        
-        // 获取内存使用情况
-        function getMemoryUsage() {
-            if (performance.memory) {
-                return (performance.memory.usedJSHeapSize / (1024 * 1024)).toFixed(2);
-            }
-            return 'N/A';
-        }
-        
-        // 应用节能模式
-        function applyPowerSavingMode() {
-            // 取消动画循环
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
-            }
-            
-            // 设置每秒更新的定时器
-            if (powerSavingInterval) clearInterval(powerSavingInterval);
-            powerSavingInterval = setInterval(updateTimeInPowerSavingMode, 1000);
-            
-            // 关闭毫秒显示
-            showMillisecondsCheckbox.checked = false;
-            document.querySelector('.milliseconds').style.display = 'none';
-            
-            // 更新性能指示器
-            perfIndicator.className = 'performance-indicator powersave';
-            perfIndicator.setAttribute('data-tooltip', `节能模式 - FPS: ${currentFps}`);
-            perfStatusEl.className = 'status-indicator offline';
-            perfStatusTextEl.textContent = '当前模式: 节能';
-            
-            saveSettings();
-        }
-        
-        // 应用正常模式
-        function applyNormalMode() {
-            // 清除节能模式的定时器
-            if (powerSavingInterval) {
-                clearInterval(powerSavingInterval);
-                powerSavingInterval = null;
-            }
-            
-            // 更新性能指示器
-            perfIndicator.className = 'performance-indicator normal';
-            perfIndicator.setAttribute('data-tooltip', `正常模式 - FPS: ${currentFps}`);
-            perfStatusEl.className = 'status-indicator';
-            perfStatusTextEl.textContent = '当前模式: 正常';
-            
-            // 启动动画循环
             animationFrameId = requestAnimationFrame(updateTime);
-            
-            saveSettings();
         }
         
         // 获取北京时间
@@ -1947,6 +1726,22 @@
             
             const timeDiff = gaokaoDate.getTime() - now.getTime();
             
+            // 检查是否为高考期间（6月7、8、9日）
+            const month = now.getMonth() + 1; // 月份从0开始
+            const date = now.getDate();
+            
+            // 在高考期间显示科目倒计时
+            if (month === 6 && date >= 7 && date <= 9) {
+                gaokaoTextEl.style.display = 'none';
+                nextExamEl.style.display = 'flex';
+                updateNextExam();
+                return;
+            }
+            
+            // 非高考期间显示高考倒计时
+            gaokaoTextEl.style.display = 'block';
+            nextExamEl.style.display = 'none';
+            
             if (timeDiff < 0) {
                 gaokaoTextEl.innerHTML = `${currentYear}年高考已结束！`;
                 gaokaoCountdownEl.style.background = 'rgba(106, 17, 203, 0.1)';
@@ -1970,18 +1765,6 @@
         function updateNextExam() {
             const now = new Date(Date.now() + timeOffset);
             const currentYear = now.getFullYear();
-            
-            // 检查是否为高考期间（6月7、8、9日）
-            const month = now.getMonth() + 1; // 月份从0开始
-            const date = now.getDate();
-            
-            if (month !== 6 || date < 7 || date > 9) {
-                nextExamContainer.style.display = 'none';
-                return;
-            }
-            
-            // 显示考试信息框
-            nextExamContainer.style.display = 'inline-block';
             
             // 找到下一科考试
             let nextExam = null;
@@ -2077,9 +1860,9 @@
         async function fetchQuote() {
             if (isTyping) return;
             
-            // 检查保底机制 - 每十句保底一句拓展金句
+            // 检查保底机制 - 每八句保底一句拓展金句
             let forceExtension = false;
-            if (enableQuoteGuarantee && consecutiveNonExtension >= 9 && 
+            if (enableQuoteGuarantee && consecutiveNonExtension >= 7 && 
                 extensionTypeCheckbox.checked && extensionQuotes.length > 0) {
                 forceExtension = true;
                 consecutiveNonExtension = 0;
@@ -2371,10 +2154,6 @@
                 bgInterval: parseInt(bgIntervalInput.value) || 30,
                 bgUrl: bgUrlInput.value,
                 currentPreset: currentPreset,
-                powerSavingMode: powerSavingMode,
-                hidePerfIndicator: hidePerfIndicatorCheckbox.checked,
-                fpsThreshold: parseInt(fpsThresholdInput.value) || 30,
-                memoryThreshold: parseInt(memoryThresholdInput.value) || 500,
                 displayPriority: document.querySelector('input[name="displayPriority"]:checked').value,
                 enableQuoteGuarantee: enableQuoteGuarantee,
                 ignoredSubjects: ignoredSubjects
@@ -2402,11 +2181,6 @@
             currentPreset = settings.currentPreset;
             updatePresetButtons(currentPreset);
             
-            powerSavingMode = settings.powerSavingMode || false;
-            powerSavingModeCheckbox.checked = powerSavingMode;
-            hidePerfIndicatorCheckbox.checked = settings.hidePerfIndicator || false;
-            fpsThreshold = settings.fpsThreshold || 30;
-            memoryThreshold = settings.memoryThreshold || 500;
             enableQuoteGuarantee = settings.enableQuoteGuarantee !== undefined ? settings.enableQuoteGuarantee : true;
             ignoredSubjects = settings.ignoredSubjects || [];
             
@@ -2420,18 +2194,10 @@
                 quotePriorityRadio.checked = true;
             }
             
-            perfIndicator.style.display = hidePerfIndicatorCheckbox.checked ? 'none' : 'flex';
-            
             // 应用被忽略的科目设置
             document.querySelectorAll('input[name="ignoredSubject"]').forEach(checkbox => {
                 checkbox.checked = !ignoredSubjects.includes(checkbox.value);
             });
-            
-            if (powerSavingMode) {
-                applyPowerSavingMode();
-            } else {
-                applyNormalMode();
-            }
         }
         
         // 全选金句类型
@@ -2461,10 +2227,6 @@
                 themeIndex: currentThemeIndex,
                 quoteInterval: quoteInterval,
                 bgInterval: bgIntervalTime,
-                powerSavingMode: powerSavingMode,
-                hidePerfIndicator: hidePerfIndicatorCheckbox.checked,
-                fpsThreshold: parseInt(fpsThresholdInput.value) || 30,
-                memoryThreshold: parseInt(memoryThresholdInput.value) || 500,
                 displayPriority: document.querySelector('input[name="displayPriority"]:checked').value,
                 enableQuoteGuarantee: enableQuoteGuarantee,
                 ignoredSubjects: ignoredSubjects
@@ -2531,24 +2293,13 @@
                     bgIntervalInput.value = bgIntervalTime;
                 }
                 
-                powerSavingMode = settings.powerSavingMode || false;
-                powerSavingModeCheckbox.checked = powerSavingMode;
-                hidePerfIndicatorCheckbox.checked = settings.hidePerfIndicator || false;
-                fpsThreshold = settings.fpsThreshold || 30;
-                memoryThreshold = settings.memoryThreshold || 500;
                 enableQuoteGuarantee = settings.enableQuoteGuarantee !== undefined ? settings.enableQuoteGuarantee : true;
                 ignoredSubjects = settings.ignoredSubjects || [];
-                
-                perfIndicator.style.display = hidePerfIndicatorCheckbox.checked ? 'none' : 'flex';
                 
                 // 应用被忽略的科目设置
                 document.querySelectorAll('input[name="ignoredSubject"]').forEach(checkbox => {
                     checkbox.checked = !ignoredSubjects.includes(checkbox.value);
                 });
-                
-                if (powerSavingMode) {
-                    applyPowerSavingMode();
-                }
             } else {
                 showDateCheckbox.checked = true;
                 showSecondsCheckbox.checked = true;
@@ -2559,8 +2310,6 @@
                 quoteTypes = Array.from(document.querySelectorAll('input[name="quoteType"]')).map(cb => cb.value);
                 quoteIntervalInput.value = 1;
                 bgIntervalInput.value = 30;
-                powerSavingModeCheckbox.checked = false;
-                hidePerfIndicatorCheckbox.checked = false;
                 quotePriorityRadio.checked = true;
                 document.body.classList.add('quote-priority');
                 enableQuoteGuarantee = true;
@@ -2676,6 +2425,59 @@
                 showToast('设置已重置为默认值！');
             }
         }
+        
+        // 导出设置
+        function exportSettings() {
+            const settings = {
+                appSettings: localStorage.getItem('appSettings'),
+                backgroundPreset: localStorage.getItem('backgroundPreset'),
+                customBackground: localStorage.getItem('customBackground'),
+            };
+            
+            const dataStr = JSON.stringify(settings);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = '高考倒计时设置.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showToast('设置已成功导出！');
+        }
+        
+        // 导入设置
+        function importSettings() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const settings = JSON.parse(event.target.result);
+                        
+                        // 验证设置格式
+                        if (settings.appSettings) localStorage.setItem('appSettings', settings.appSettings);
+                        if (settings.backgroundPreset) localStorage.setItem('backgroundPreset', settings.backgroundPreset);
+                        if (settings.customBackground) localStorage.setItem('customBackground', settings.customBackground);
+                        
+                        loadSettings();
+                        fetchQuote();
+                        showToast('设置已成功导入！');
+                    } catch (error) {
+                        console.error('导入设置失败:', error);
+                        showToast('导入失败：文件格式不正确');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
 
         // 初始化
         function init() {
@@ -2685,7 +2487,6 @@
             loadSettings();
             animationFrameId = requestAnimationFrame(updateTime);
             fetchQuote();
-            startPerformanceMonitor();
             initExtensionQuotes();
             
             // 启动防休眠模式
@@ -2739,7 +2540,7 @@
                         }
                     }
                     saveSettings();
-                    updateNextExam(); // 立即更新考试信息
+                    updateGaokaoCountdown(); // 立即更新考试信息
                 });
             });
             
@@ -2756,25 +2557,13 @@
             refreshBtnEl.addEventListener('click', fetchQuote);
             themeBtn.addEventListener('click', toggleTheme);
             settingsBtn.addEventListener('click', toggleSettings);
+            importSettingsBtn.addEventListener('click', importSettings);
+            exportSettingsBtn.addEventListener('click', exportSettings);
             fullscreenBtn.addEventListener('click', toggleFullscreen);
             selectAllBtn.addEventListener('click', selectAllTypes);
             deselectAllBtn.addEventListener('click', deselectAllTypes);
             resetBtn.addEventListener('click', resetToDefault);
             downloadExtBtn.addEventListener('click', downloadExtensionQuotes);
-            
-            powerSavingModeCheckbox.addEventListener('change', () => {
-                powerSavingMode = powerSavingModeCheckbox.checked;
-                if (powerSavingMode) {
-                    applyPowerSavingMode();
-                } else {
-                    applyNormalMode();
-                }
-            });
-            
-            hidePerfIndicatorCheckbox.addEventListener('change', () => {
-                perfIndicator.style.display = hidePerfIndicatorCheckbox.checked ? 'none' : 'flex';
-                saveSettings();
-            });
             
             cancelSettingsBtn.addEventListener('click', () => {
                 if (tempSettings) {
@@ -2787,8 +2576,6 @@
             saveSettingsBtn.addEventListener('click', () => {
                 quoteInterval = Math.max(1, parseInt(quoteIntervalInput.value) || 1);
                 bgIntervalTime = Math.max(1, parseInt(bgIntervalInput.value) || 30);
-                fpsThreshold = Math.max(15, Math.min(60, parseInt(fpsThresholdInput.value) || 30));
-                memoryThreshold = Math.max(100, Math.min(1000, parseInt(memoryThresholdInput.value) || 500));
                 
                 const selectedTypes = [];
                 document.querySelectorAll('input[name="quoteType"]:checked').forEach(cb => {
@@ -2902,6 +2689,11 @@
                 bgProgressEl.style.display = showBgProgressCheckbox.checked ? 'block' : 'none';
                 saveSettings();
             });
+            
+            // 自动下载扩展金句（如果启用）
+            if (extensionTypeCheckbox.checked && !localStorage.getItem('extensionQuotes')) {
+                downloadExtensionQuotes();
+            }
         }
         
         // 页面加载完成后初始化
