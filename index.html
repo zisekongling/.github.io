@@ -1933,39 +1933,45 @@
             }
         }
         
-        // 计算高考倒计时
-        function updateGaokaoCountdown() {
-            const now = new Date(Date.now() + timeOffset);
-            const currentYear = now.getFullYear();
-            // 高考日期为6月7日（月份0为1月，所以5表示6月）
-            const gaokaoDate = new Date(currentYear, 5, 7);
-            
-            // 如果当前时间已经过了6月7日，则计算下一年的高考
-            if (now > gaokaoDate) {
-                gaokaoDate.setFullYear(currentYear + 1);
-            }
-            
-            const timeDiff = gaokaoDate.getTime() - now.getTime();
-            
-            if (timeDiff < 0) {
-                gaokaoTextEl.innerHTML = `${currentYear}年高考已结束！`;
-                gaokaoCountdownEl.style.background = 'rgba(106, 17, 203, 0.1)';
-                return;
-            }
-            
-            const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            const hoursDiff = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutesDiff = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            
-            if (daysDiff === 0) {
-                gaokaoTextEl.innerHTML = `${gaokaoDate.getFullYear()}年高考今天开始！<br>加油！`;
-                gaokaoCountdownEl.style.background = 'rgba(106, 17, 203, 0.2)';
-            } else {
-                gaokaoTextEl.innerHTML = `距离${gaokaoDate.getFullYear()}年高考还有<br>${daysDiff}天${hoursDiff}小时${minutesDiff}分钟`;
-                gaokaoCountdownEl.style.background = 'rgba(106, 17, 203, 0.1)';
-            }
-        }
-        
+     function updateGaokaoCountdown() {
+    const now = new Date(Date.now() + timeOffset);
+    const currentYear = now.getFullYear();
+    
+    // 高考日期范围：6月7日 00:00 至 6月9日 23:59:59.999
+    const gaokaoStart = new Date(currentYear, 5, 7);
+    const gaokaoEnd = new Date(currentYear, 5, 9, 23, 59, 59, 999);
+    
+    // 如果当前时间在高考期间内
+    if (now >= gaokaoStart && now <= gaokaoEnd) {
+        gaokaoTextEl.innerHTML = `${currentYear}年高考进行中！<br>加油！`;
+        gaokaoCountdownEl.style.background = 'rgba(106, 17, 203, 0.2)';
+        return;
+    }
+    
+    // 确定目标高考日期（当前年或下一年）
+    let targetGaokao = gaokaoStart;
+    if (now > gaokaoEnd) {
+        targetGaokao = new Date(currentYear + 1, 5, 7);
+    }
+    
+    const timeDiff = targetGaokao.getTime() - now.getTime();
+    
+    // 高考已结束（理论上不会触发，保留安全判断）
+    if (timeDiff < 0) {
+        gaokaoTextEl.innerHTML = `${targetGaokao.getFullYear()}年高考已结束！`;
+        gaokaoCountdownEl.style.background = 'rgba(106, 17, 203, 0.1)';
+        return;
+    }
+    
+    // 计算倒计时
+    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hoursDiff = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutesDiff = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    
+    // 高考当天特殊处理（已覆盖在高考期间判断）
+    gaokaoTextEl.innerHTML = `距离${targetGaokao.getFullYear()}年高考还有<br>${daysDiff}天${hoursDiff}小时${minutesDiff}分钟`;
+    gaokaoCountdownEl.style.background = 'rgba(106, 17, 203, 0.1)';
+}
         // 更新下一科考试信息
         function updateNextExam() {
             const now = new Date(Date.now() + timeOffset);
@@ -2022,7 +2028,7 @@
                 const hoursLeft = Math.floor(minTimeDiff / (1000 * 60 * 60));
                 const minutesLeft = Math.floor((minTimeDiff % (1000 * 60 * 60)) / (1000 * 60));
                 
-                nextExamText.innerHTML = `下一科: ${nextExam.name}<br>开考: ${hoursLeft}时${minutesLeft}分`;
+                nextExamText.innerHTML = `下一科是: ${nextExam.name}<br>距离开考仅剩: ${hoursLeft}时${minutesLeft}分`;
             } else {
                 // 所有考试都已结束
                 nextExamText.innerHTML = "所有科目考试结束";
