@@ -2008,14 +2008,6 @@
                 // 计算时间差
                 const timeDiff = examDate - now;
                 
-                // 如果考试已经开始但未结束，则显示该考试
-                if (timeDiff < 0 && timeDiff > -1000 * 60 * 60 * 3) {
-                    // 考试正在进行中
-                    const minutesLeft = Math.floor(Math.abs(timeDiff) / (1000 * 60));
-                    nextExamText.innerHTML = `${subject.name}考试中<br>剩余: ${Math.floor(minutesLeft / 60)}时${minutesLeft % 60}分`;
-                    return;
-                }
-                
                 // 如果考试尚未开始，且时间差小于当前最小时间差
                 if (timeDiff > 0 && timeDiff < minTimeDiff) {
                     minTimeDiff = timeDiff;
